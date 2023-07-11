@@ -83,8 +83,8 @@
 		E9A716882A594B3B00547D00 /* ViewVontrollers */ = {
 			isa = PBXGroup;
 			children = (
-				E9808F8D2A1F983D00B3A0EB /* SettingsViewController.swift */,
 				E9A076A62A58808F003C0074 /* ColoredViewController.swift */,
+				E9808F8D2A1F983D00B3A0EB /* SettingsViewController.swift */,
 			);
 			path = ViewVontrollers;
 			sourceTree = "<group>";

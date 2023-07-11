@@ -29,12 +29,18 @@ class SettingsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupLables()
         setupSlidersValues(for: sliderRed, sliderGreen, sliderBlue)
         setupStaticLables()
+        
         setupView()
+        
         buttonReset.setTitle("RESET", for: .normal)
     }
+    
+    var delegate: IColoredViewControllerDelegate!
+    
     
     // MARK: IBActions
     
@@ -58,6 +64,11 @@ class SettingsViewController: UIViewController {
         sliderBlue.value = 0
         setupView()
         setupLables()
+    }
+    
+    @IBAction func tapSaveButton() {
+        delegate.changeBackgroundColor()
+        dismiss(animated: true)
     }
     
     // MARK: Private Methods
