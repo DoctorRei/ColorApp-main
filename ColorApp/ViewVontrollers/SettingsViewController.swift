@@ -30,10 +30,9 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLables()
-        setupSliderRed()
-        setupSliderGreen()
-        setupSliderBlue()
+        setupSlidersValues(for: sliderRed, sliderGreen, sliderBlue)
         setupStaticLables()
+        setupView()
         buttonReset.setTitle("RESET", for: .normal)
     }
     
@@ -51,7 +50,6 @@ class SettingsViewController: UIViewController {
         default:
             break
         }
-        
     }
     
     @IBAction func tapResetButton() {
@@ -64,32 +62,35 @@ class SettingsViewController: UIViewController {
     
     // MARK: Private Methods
     
+    private func setupSlidersValues(for sliders: UISlider...) {
+        
+        sliders.forEach { slider in
+            switch slider {
+                
+            case sliderRed:
+                sliderRed.value = 0
+                sliderRed.minimumValue = 0
+                sliderRed.maximumValue = 255
+                sliderRed.tintColor = .red
+                
+            case sliderGreen:
+                sliderGreen.value = 0
+                sliderGreen.minimumValue = 0
+                sliderGreen.maximumValue = 255
+                sliderGreen.tintColor = .green
+                
+            case sliderBlue:
+                sliderBlue.value = 0
+                sliderBlue.minimumValue = 0
+                sliderBlue.maximumValue = 255
+                sliderBlue.tintColor = .blue
+                
+            default:
+                break
+            }
+        }
+    }
     
-    private func setupSliderRed() {
-        sliderRed.value = 0
-        sliderRed.minimumValue = 0
-        sliderRed.maximumValue = 255
-        sliderRed.tintColor = .red
-    }
-    private func setupSliderGreen() {
-        sliderGreen.value = 0
-        sliderGreen.minimumValue = 0
-        sliderGreen.maximumValue = 255
-        sliderGreen.tintColor = .green
-    }
-    private func setupSliderBlue() {
-        sliderBlue.value = 0
-        sliderBlue.minimumValue = 0
-        sliderBlue.maximumValue = 255
-        sliderBlue.tintColor = .blue
-    }
-//    private func setupColor(red: CGFloat, green: CGFloat, blue: CGFloat) -> UIColor {
-//        return UIColor(
-//            red: red/255,
-//            green: green/255,
-//            blue: blue/255,
-//            alpha: 1)
-//    }
     private func setupView() {
         mainView.backgroundColor = UIColor(
             red: CGFloat(sliderRed.value) / 255,
@@ -98,9 +99,11 @@ class SettingsViewController: UIViewController {
             alpha: 1
         )
     }
+    
     private func fromFloatToString(_ slider: UISlider) -> String {
         return String(format: "%.f", slider.value)
     }
+    
     private func setupLables() {
         labelRed.text = "RGB"
         labelRed.font = .systemFont(ofSize: 14)
@@ -112,6 +115,7 @@ class SettingsViewController: UIViewController {
         labelBlue.font = .systemFont(ofSize: 14)
         labelStaticBlue.text = "Blue"
     }
+    
     private func setupStaticLables() {
         labelStaticRed.text = "Red"
         labelStaticRed.font = .systemFont(ofSize: 14)
