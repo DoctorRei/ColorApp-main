@@ -9,7 +9,7 @@ import UIKit
 
 
 protocol IColoredViewControllerDelegate {
-    func changeBackgroundColor()
+    func changeBackgroundColor(for color: UIColor)
 }
 
 class ColoredViewController: UIViewController {
@@ -23,15 +23,16 @@ class ColoredViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let seccondVC = segue.destination as? SettingsViewController else { return}
         seccondVC.delegate = self
+        seccondVC.colorFromFirstScreen = view.backgroundColor ?? .red
     }
 
 }
 
 extension ColoredViewController: IColoredViewControllerDelegate {
-    func changeBackgroundColor() {
+   
+    func changeBackgroundColor(for color: UIColor) {
         labelTest.text = "Hello"
-        view.backgroundColor = .red
+        view.backgroundColor = color
     }
-    
     
 }

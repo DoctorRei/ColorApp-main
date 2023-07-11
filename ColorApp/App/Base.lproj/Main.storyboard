@@ -109,6 +109,9 @@
                                 <subviews>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="y7x-g2-Tor">
                                         <rect key="frame" x="-2" y="0.0" width="254" height="31"/>
+                                        <connections>
+                                            <action selector="sliderAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="AiL-rE-XSU"/>
+                                        </connections>
                                     </slider>
                                     <slider opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="0l5-j4-ga1">
                                         <rect key="frame" x="-2" y="52" width="254" height="31"/>

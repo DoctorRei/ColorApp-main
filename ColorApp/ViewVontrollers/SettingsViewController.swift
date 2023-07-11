@@ -30,16 +30,20 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupLables()
+        mainView.backgroundColor = colorFromFirstScreen
+
+        
         setupSlidersValues(for: sliderRed, sliderGreen, sliderBlue)
         setupStaticLables()
         
-        setupView()
-        
         buttonReset.setTitle("RESET", for: .normal)
+        
+        setupSliders(for: colorFromFirstScreen)
+        setupLables()
     }
     
     var delegate: IColoredViewControllerDelegate!
+    var colorFromFirstScreen: UIColor!
     
     
     // MARK: IBActions
@@ -67,7 +71,7 @@ class SettingsViewController: UIViewController {
     }
     
     @IBAction func tapSaveButton() {
-        delegate.changeBackgroundColor()
+        delegate.changeBackgroundColor(for: mainView.backgroundColor ?? .blue)
         dismiss(animated: true)
     }
     
@@ -79,19 +83,16 @@ class SettingsViewController: UIViewController {
             switch slider {
                 
             case sliderRed:
-                sliderRed.value = 0
                 sliderRed.minimumValue = 0
                 sliderRed.maximumValue = 255
                 sliderRed.tintColor = .red
                 
             case sliderGreen:
-                sliderGreen.value = 0
                 sliderGreen.minimumValue = 0
                 sliderGreen.maximumValue = 255
                 sliderGreen.tintColor = .green
                 
             case sliderBlue:
-                sliderBlue.value = 0
                 sliderBlue.minimumValue = 0
                 sliderBlue.maximumValue = 255
                 sliderBlue.tintColor = .blue
@@ -115,14 +116,29 @@ class SettingsViewController: UIViewController {
         return String(format: "%.f", slider.value)
     }
     
+    private func setupSliders(for color: UIColor) {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        
+        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        // я долго вкуривал. Тут я принимаю цвет. Функция прогоняет его и разбирает на части. Присваивает значения ранее объявленным переменным. После чего берет эти значения и передает в значение слайдеров
+        
+        sliderRed.value = Float(red) * 255
+        sliderGreen.value = Float(green) * 255
+        sliderBlue.value = Float(blue) * 255
+        
+    }
+    
     private func setupLables() {
-        labelRed.text = "RGB"
+        labelRed.text = fromFloatToString(sliderRed)
         labelRed.font = .systemFont(ofSize: 14)
         labelStaticRed.text = "Red"
-        labelGreen.text = "RGB"
+        labelGreen.text = fromFloatToString(sliderGreen)
         labelGreen.font = .systemFont(ofSize: 14)
         labelStaticGreen.text = "Green"
-        labelBlue.text = "RGB"
+        labelBlue.text = fromFloatToString(sliderBlue)
         labelBlue.font = .systemFont(ofSize: 14)
         labelStaticBlue.text = "Blue"
     }
