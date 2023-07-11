@@ -39,8 +39,8 @@ class SettingsViewController: UIViewController {
     
     // MARK: IBActions
     
-    func sliderAction(_ sender: UISlider) {
-        
+    @IBAction func sliderAction(_ sender: UISlider) {
+        setupView()
         switch sender{
         case sliderRed:
             labelRed.text = fromFloatToString(sender)
@@ -54,18 +54,6 @@ class SettingsViewController: UIViewController {
         
     }
     
-    @IBAction func sliderRedAction() {
-        labelRed.text = fromFloatToString(sliderRed)
-        setupView()
-    }
-    @IBAction func sliderGreenAction() {
-        labelGreen.text = fromFloatToString(sliderGreen)
-        setupView()
-    }
-    @IBAction func sliderBlueAction() {
-        labelBlue.text = fromFloatToString(sliderBlue)
-        setupView()
-    }
     @IBAction func tapResetButton() {
         sliderRed.value = 0
         sliderGreen.value = 0
@@ -75,6 +63,8 @@ class SettingsViewController: UIViewController {
     }
     
     // MARK: Private Methods
+    
+    
     private func setupSliderRed() {
         sliderRed.value = 0
         sliderRed.minimumValue = 0
@@ -93,18 +83,20 @@ class SettingsViewController: UIViewController {
         sliderBlue.maximumValue = 255
         sliderBlue.tintColor = .blue
     }
-    private func setupColor(red: CGFloat, green: CGFloat, blue: CGFloat) -> UIColor {
-        return UIColor(
-            red: red/255,
-            green: green/255,
-            blue: blue/255,
-            alpha: 1)
-    }
+//    private func setupColor(red: CGFloat, green: CGFloat, blue: CGFloat) -> UIColor {
+//        return UIColor(
+//            red: red/255,
+//            green: green/255,
+//            blue: blue/255,
+//            alpha: 1)
+//    }
     private func setupView() {
-        mainView.backgroundColor = setupColor(
-            red: CGFloat(sliderRed.value),
-            green: CGFloat(sliderGreen.value),
-            blue: CGFloat(sliderBlue.value))
+        mainView.backgroundColor = UIColor(
+            red: CGFloat(sliderRed.value) / 255,
+            green: CGFloat(sliderGreen.value) / 255,
+            blue: CGFloat(sliderBlue.value) / 255,
+            alpha: 1
+        )
     }
     private func fromFloatToString(_ slider: UISlider) -> String {
         return String(format: "%.f", slider.value)
