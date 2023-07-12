@@ -10,12 +10,12 @@ import Foundation
 
 class SettingsViewController: UIViewController {
     
-    // MARK: IBOutlets
+    // MARK: - IBOutlets
     @IBOutlet var mainView: UIView!
     
-    @IBOutlet var labelRed: UILabel!
-    @IBOutlet var labelGreen: UILabel!
-    @IBOutlet var labelBlue: UILabel!
+    @IBOutlet var textFieldRed: UITextField!
+    @IBOutlet var textFieldGreen: UITextField!
+    @IBOutlet var textFieldBlue: UITextField!
     
     @IBOutlet var sliderRed: UISlider!
     @IBOutlet var sliderGreen: UISlider!
@@ -29,6 +29,9 @@ class SettingsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        textFieldRed.delegate = self
+        textFieldGreen.delegate = self
+        textFieldBlue.delegate = self
         
         mainView.backgroundColor = colorFromFirstScreen
         setupBasicSlidersValues(for: sliderRed, sliderBlue, sliderGreen)
@@ -41,20 +44,29 @@ class SettingsViewController: UIViewController {
     }
     
     var delegate: IColoredViewControllerDelegate!
+    
     var colorFromFirstScreen: UIColor!
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        textFieldRed.endEditing(true)
+        textFieldGreen.endEditing(true)
+        textFieldBlue.endEditing(true)
+    }
     
-    // MARK: IBActions
+    
+    // MARK: - IBActions
     
     @IBAction func sliderAction(_ sender: UISlider) {
         setupView()
+        
         switch sender{
         case sliderRed:
-            labelRed.text = fromFloatToString(sender)
+            textFieldRed.text = fromFloatToString(sender)
         case sliderBlue:
-            labelBlue.text = fromFloatToString(sender)
+            textFieldBlue.text = fromFloatToString(sender)
         case sliderGreen:
-            labelGreen.text = fromFloatToString(sender)
+            textFieldGreen.text = fromFloatToString(sender)
         default:
             break
         }
@@ -64,6 +76,7 @@ class SettingsViewController: UIViewController {
         sliderRed.value = 0
         sliderGreen.value = 0
         sliderBlue.value = 0
+        
         setupView()
         setupLables()
     }
@@ -73,7 +86,7 @@ class SettingsViewController: UIViewController {
         dismiss(animated: true)
     }
     
-    // MARK: Private Methods
+    // MARK: - Private Methods
     
     private func setupBasicSlidersValues(for sliders: UISlider...) {
         sliders.forEach { slider in
@@ -81,29 +94,25 @@ class SettingsViewController: UIViewController {
             slider.minimumValue = 0
             slider.maximumValue = 255
             
-            setupSliderColor(for: slider)
+            setupSliderTintColor(for: slider)
         }
     }
     
-    private func setupSliderColor(for sliders: UISlider...) {
+    private func setupSliderTintColor(for sliders: UISlider...) {
         sliders.forEach { slider in
             switch slider {
                 
             case sliderRed:
                 sliderRed.tintColor = .red
-                
             case sliderGreen:
                 sliderGreen.tintColor = .green
-                
             case sliderBlue:
                 sliderBlue.tintColor = .blue
-        
             default:
                 break
             }
         }
     }
-    
     
     private func setupView() {
         mainView.backgroundColor = UIColor(
@@ -114,12 +123,10 @@ class SettingsViewController: UIViewController {
         )
     }
     
-    
     private func fromFloatToString(_ slider: UISlider) -> String {
         return String(format: "%.f", slider.value)
     }
     
-   
     private func setupSliders(for color: UIColor) {
         var red: CGFloat = 0
         var green: CGFloat = 0
@@ -137,14 +144,14 @@ class SettingsViewController: UIViewController {
     
     private func setupLables() { // не вините меня за эти длинные методы. Если я сделаю тот же фор ич со свитчом, то кода станет еще больше. И принципиально ничего не изменится. Даже красивее код не станет. Да и в принципе это все пережиток того, что я не хотел вбивать значения в сториборде и сделал кодом для практики. Сетап Слайдерс я переделал в красивый вариант, но все равно это просто настройка значений без дополнительной логики. Выше я сделал красивый аналог, который между внесенными данными красиво бегает. Если критично - могу так же делать
         
-        labelRed.text = fromFloatToString(sliderRed)
-        labelRed.font = .systemFont(ofSize: 14)
+        textFieldRed.text = fromFloatToString(sliderRed)
+        textFieldRed.font = .systemFont(ofSize: 14)
         labelStaticRed.text = "Red"
-        labelGreen.text = fromFloatToString(sliderGreen)
-        labelGreen.font = .systemFont(ofSize: 14)
+        textFieldGreen.text = fromFloatToString(sliderGreen)
+        textFieldGreen.font = .systemFont(ofSize: 14)
         labelStaticGreen.text = "Green"
-        labelBlue.text = fromFloatToString(sliderBlue)
-        labelBlue.font = .systemFont(ofSize: 14)
+        textFieldBlue.text = fromFloatToString(sliderBlue)
+        textFieldBlue.font = .systemFont(ofSize: 14)
         labelStaticBlue.text = "Blue"
     }
     
@@ -158,4 +165,23 @@ class SettingsViewController: UIViewController {
     }
 }
 
-
+extension SettingsViewController: UITextFieldDelegate {
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+       
+        switch text {
+        case textFieldRed.text:
+            sliderRed.value = Float(text) ?? 0
+            setupView()
+        case textFieldGreen.text:
+            sliderGreen.value = Float(text) ?? 0
+            setupView()
+        case textFieldBlue.text:
+            sliderBlue.value = Float(text) ?? 0
+            setupView()
+        default:
+            break
+        }
+    }
+}
