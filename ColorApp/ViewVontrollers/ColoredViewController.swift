@@ -24,6 +24,7 @@ class ColoredViewController: UIViewController {
         guard let seccondVC = segue.destination as? SettingsViewController else { return}
         seccondVC.delegate = self
         seccondVC.colorFromFirstScreen = view.backgroundColor ?? .red
+        // Как опциональное решение, можно сделать протокол, который обязывает подписавшегося выполнять настройку слайдеров, лейблов и соответственно цвета. 
     }
 
 }
@@ -31,7 +32,7 @@ class ColoredViewController: UIViewController {
 extension ColoredViewController: IColoredViewControllerDelegate {
    
     func changeBackgroundColor(for color: UIColor) {
-        labelTest.text = "Hello"
+        labelTest.text = GoodWordsForMeLovely().meBeCool.randomElement()
         view.backgroundColor = color
     }
     
