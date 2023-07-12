@@ -31,9 +31,7 @@ class SettingsViewController: UIViewController {
         super.viewDidLoad()
         
         mainView.backgroundColor = colorFromFirstScreen
-
-        
-        setupSlidersValues(for: sliderRed, sliderGreen, sliderBlue)
+        setupBasicSlidersValues(for: sliderRed, sliderBlue, sliderGreen)
         setupStaticLables()
         
         buttonReset.setTitle("RESET", for: .normal)
@@ -77,31 +75,35 @@ class SettingsViewController: UIViewController {
     
     // MARK: Private Methods
     
-    private func setupSlidersValues(for sliders: UISlider...) {
-        
+    private func setupBasicSlidersValues(for sliders: UISlider...) {
+        sliders.forEach { slider in
+            
+            slider.minimumValue = 0
+            slider.maximumValue = 255
+            
+            setupSliderColor(for: slider)
+        }
+    }
+    
+    private func setupSliderColor(for sliders: UISlider...) {
         sliders.forEach { slider in
             switch slider {
                 
             case sliderRed:
-                sliderRed.minimumValue = 0
-                sliderRed.maximumValue = 255
                 sliderRed.tintColor = .red
                 
             case sliderGreen:
-                sliderGreen.minimumValue = 0
-                sliderGreen.maximumValue = 255
                 sliderGreen.tintColor = .green
                 
             case sliderBlue:
-                sliderBlue.minimumValue = 0
-                sliderBlue.maximumValue = 255
                 sliderBlue.tintColor = .blue
-                
+        
             default:
                 break
             }
         }
     }
+    
     
     private func setupView() {
         mainView.backgroundColor = UIColor(
@@ -112,10 +114,12 @@ class SettingsViewController: UIViewController {
         )
     }
     
+    
     private func fromFloatToString(_ slider: UISlider) -> String {
         return String(format: "%.f", slider.value)
     }
     
+   
     private func setupSliders(for color: UIColor) {
         var red: CGFloat = 0
         var green: CGFloat = 0
@@ -123,7 +127,7 @@ class SettingsViewController: UIViewController {
         var alpha: CGFloat = 0
         
         color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        // я долго вкуривал. Тут я принимаю цвет. Функция прогоняет его и разбирает на части. Присваивает значения ранее объявленным переменным. После чего берет эти значения и передает в значение слайдеров
+        // я долго вкуривал. Тут я принимаю цвет извне. Функция прогоняет его и разбирает на части. Присваивает значения ранее объявленным переменным. После чего берет эти значения и передает в значение слайдеров
         
         sliderRed.value = Float(red) * 255
         sliderGreen.value = Float(green) * 255
@@ -131,7 +135,8 @@ class SettingsViewController: UIViewController {
         
     }
     
-    private func setupLables() {
+    private func setupLables() { // не вините меня за эти длинные методы. Если я сделаю тот же фор ич со свитчом, то кода станет еще больше. И принципиально ничего не изменится. Даже красивее код не станет. Да и в принципе это все пережиток того, что я не хотел вбивать значения в сториборде и сделал кодом для практики. Сетап Слайдерс я переделал в красивый вариант, но все равно это просто настройка значений без дополнительной логики. Выше я сделал красивый аналог, который между внесенными данными красиво бегает. Если критично - могу так же делать
+        
         labelRed.text = fromFloatToString(sliderRed)
         labelRed.font = .systemFont(ofSize: 14)
         labelStaticRed.text = "Red"
