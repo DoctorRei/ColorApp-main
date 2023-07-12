@@ -13,7 +13,7 @@ protocol IColoredViewControllerDelegate {
 }
 
 class ColoredViewController: UIViewController {
-
+    
     @IBOutlet var labelTest: UILabel!
     
     override func viewDidLoad() {
@@ -24,13 +24,13 @@ class ColoredViewController: UIViewController {
         guard let seccondVC = segue.destination as? SettingsViewController else { return}
         seccondVC.delegate = self
         seccondVC.colorFromFirstScreen = view.backgroundColor ?? .red
-        // Как опциональное решение, можно сделать протокол, который обязывает подписавшегося выполнять настройку слайдеров, лейблов и соответственно цвета. 
+        // Как опциональное решение, можно сделать протокол, который обязывает подписавшегося выполнять настройку слайдеров, лейблов и соответственно цвета.
     }
-
+    
 }
 
 extension ColoredViewController: IColoredViewControllerDelegate {
-   
+    
     func changeBackgroundColor(for color: UIColor) {
         labelTest.text = GoodWordsForMeLovely().meBeCool.randomElement()
         view.backgroundColor = color
