@@ -83,6 +83,7 @@ class SettingsViewController: UIViewController {
     
     @IBAction func tapSaveButton() {
         delegate.changeBackgroundColor(for: mainView.backgroundColor ?? .blue)
+            
         dismiss(animated: true)
     }
     
@@ -127,6 +128,7 @@ class SettingsViewController: UIViewController {
         return String(format: "%.f", slider.value)
     }
     
+    
     private func setupSliders(for color: UIColor) {
         var red: CGFloat = 0
         var green: CGFloat = 0
@@ -163,25 +165,76 @@ class SettingsViewController: UIViewController {
         labelStaticBlue.text = "Blue"
         labelStaticBlue.font = .systemFont(ofSize: 14)
     }
+    
+    private func showAlert() {
+        let alertController = UIAlertController(
+            title: "Эй",
+            message: "Введи значение от 0 до 255",
+            preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "OK", style: .default)
+        alertController.addAction(okAction)
+        present(alertController, animated: true)
+    }
 }
 
 extension SettingsViewController: UITextFieldDelegate {
     
+    func textField(_ textField: UITextField,
+                   shouldChangeCharactersIn range: NSRange,
+                   replacementString string: String) -> Bool {
+        
+        guard let currentText = textField.text else {
+            return true
+        }
+        
+        let newText = (currentText as NSString).replacingCharacters(in: range, with: string)
+        
+        // Проверяем, превышает ли новая строка 3 символа
+        if newText.count > 3 {
+            showAlert()
+            return false
+        }
+        return true
+    }
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
         guard let text = textField.text else { return }
-       
-        switch text {
-        case textFieldRed.text:
-            sliderRed.value = Float(text) ?? 0
-            setupView()
-        case textFieldGreen.text:
-            sliderGreen.value = Float(text) ?? 0
-            setupView()
-        case textFieldBlue.text:
-            sliderBlue.value = Float(text) ?? 0
-            setupView()
-        default:
-            break
+        
+        // Тут проверяем, пустое ли значение и если да - возвращаем старое значение
+        if text.isEmpty {
+            // Восстанавливаем предыдущее значение
+            switch textField {
+            case textFieldRed:
+                textFieldRed.text = fromFloatToString(sliderRed)
+            case textFieldGreen:
+                textFieldGreen.text = fromFloatToString(sliderGreen)
+            case textFieldBlue:
+                textFieldBlue.text = fromFloatToString(sliderBlue)
+            default:
+                break
+            }
+        } else {
+            // Ставим значение от нуля до 255. Если выше или ниже - алерт
+            if let value = Float(text), value < 0 || value > 255 {
+                showAlert()
+                return
+            }
+            
+            // На основе введенных данных обновляем значение слайдера, а значит и цвет
+            switch textField {
+            case textFieldRed:
+                sliderRed.value = Float(text) ?? 0
+                setupView()
+            case textFieldGreen:
+                sliderGreen.value = Float(text) ?? 0
+                setupView()
+            case textFieldBlue:
+                sliderBlue.value = Float(text) ?? 0
+                setupView()
+            default:
+                break
+            }
         }
     }
 }
